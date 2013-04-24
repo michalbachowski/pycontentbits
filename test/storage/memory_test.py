@@ -41,14 +41,19 @@ class MemoryTestCase(unittest.TestCase):
         self.assertTrue(idxb in c)
         self.assertEqual(c[idxb], 'b')
 
+    def test_create_collection_generates_unique_id_for_item(self):
+        idx1 = self.collection.create_collection(0)
+        idx2 = self.collection.create_collection()
+        self.assertNotEqual(idx1, idx2)
+
     def test_read_collection_returns_dict_for_existing_collection(self):
         idx = self.collection.create_collection()
         self.assertEqual(self.collection.read_collection(idx), {})
 
     def test_read_collection_returns_item_added_to_collection(self):
         idx = self.collection.create_collection()
-        idxa = self.collection.store_item(idx, data='a')
-        idxb = self.collection.store_item(idx, data='b')
+        idxa = self.collection.store_item(idx, 'a')
+        idxb = self.collection.store_item(idx, 'b')
         c = self.collection.read_collection(idx)
         self.assertTrue(idxa in c)
         self.assertTrue(idxb in c)
@@ -104,6 +109,19 @@ class MemoryTestCase(unittest.TestCase):
         except KeyError:
             err = True
         self.assertTrue(err)
+
+    def test_store_item_generates_unique_item_id(self):
+        self.collection.create_collection('a')
+        idx1 = self.collection.store_item('a', None, 0)
+        idx2 = self.collection.store_item('a', None)
+        self.assertNotEqual(idx1, idx2)
+
+    def test_store_item_generates_item_id_unique_to_given_collection(self):
+        self.collection.create_collection('a')
+        self.collection.create_collection('b')
+        idx1 = self.collection.store_item('a', None, 0)
+        idx2 = self.collection.store_item('b', None)
+        self.assertEqual(idx1, idx2)
 
 
 if "__main__" == __name__:

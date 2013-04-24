@@ -5,27 +5,36 @@ from contentbits.storage.abstract import Abstract
 
 
 class Memory(Abstract):
+    """ Memory-based storage for collections """
 
     def __init__(self):
+        """ Class initialization """
         self._collections = {}
         self._seq = count()
 
-    def _get_idx(self):
-        return next(self._seq)
+    def _get_idx(self, collection):
+        """ Method genertes identificator for collection or item """
+        # make sure that collection with given ID does not exist
+        while True:
+            idx = next(self._seq)
+            if idx not in collection:
+                return idx
 
     def read_collection(self, collection_id):
         return self._collections[collection_id]
 
     def create_collection(self, collection_id=None):
+        # generate collection_id if not given
         if collection_id is None:
-            collection_id = self._get_idx()
+            collection_id = self._get_idx(self._collections)
+        # make sure that we will not override existing collection
         if collection_id not in self._collections:
             self._collections[collection_id] = {}
         return collection_id
 
     def store_item(self, collection_id, data, item_id=None):
         if item_id is None:
-            item_id = self._get_idx()
+            item_id = self._get_idx(self._collections[collection_id])
         self._collections[collection_id][item_id] = data
         return item_id
 
