@@ -19,6 +19,10 @@ if [ -x /usr/local/bin/pip ]; then
     pip install tox
     # coverage
     pip install coverage
+    # sphinx
+    pip install sphinx
+    # mock
+    pip install mock
 fi
 
 # configure environment
