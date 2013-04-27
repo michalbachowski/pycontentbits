@@ -37,12 +37,7 @@ class CollectionTestCase(unittest.TestCase):
         self.assertFalse(err)
 
     def test_append_requires_1_argument(self):
-        err = False
-        try:
-            Collection().append()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, Collection().append)
 
     def test_append_requires_1_argument_1(self):
         err = False
@@ -149,12 +144,7 @@ class CollectionTestCase(unittest.TestCase):
 class ItemTestCase(unittest.TestCase):
 
     def test_init_requires_1_argument(self):
-        err = False
-        try:
-            Item()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, Item)
 
     def test_init_requires_1_argument_1(self):
         err = False

@@ -5,6 +5,7 @@
 # python standard library
 #
 import unittest
+from functools import partial
 
 # hack for loading modules
 import _path
@@ -19,113 +20,54 @@ from contentbits.storage.abstract import Abstract
 
 class AbstractTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.a = Abstract()
+
     def test_read_collection_requires_1_argument(self):
-        err = False
-        try:
-            Abstract().read_collection()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, self.a.read_collection)
 
     def test_read_collection_requires_1_argument_1(self):
-        err = False
-        try:
-            Abstract().read_collection(None)
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError,
+                partial(self.a.read_collection, None))
 
     def test_store_item_requires_2_arguments(self):
-        err = False
-        try:
-            Abstract().store_item()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, self.a.store_item)
 
     def test_store_item_requires_2_arguments_1(self):
-        err = False
-        try:
-            Abstract().store_item(None)
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, partial(self.a.store_item, None))
 
     def test_store_item_requires_2_arguments_2(self):
-        err = False
-        try:
-            Abstract().store_item(None, None)
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError,
+                partial(self.a.store_item, None, None))
 
     def test_store_item_allows_to_pass_3_arguments(self):
-        err = False
-        err2 = False
-        try:
-            Abstract().store_item(None, None, item_id=None)
-        except TypeError:
-            err = True
-        except NotImplementedError:
-            err2 = True
-        self.assertFalse(err)
-        self.assertTrue(err2)
+        self.assertRaises(NotImplementedError, partial(Abstract().store_item,
+                None, None, item_id=None))
 
     def test_remove_item_requires_2_arguments(self):
-        err = False
-        try:
-            Abstract().remove_item()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, Abstract().remove_item)
 
     def test_remove_item_requires_2_arguments_1(self):
-        err = False
-        try:
-            Abstract().remove_item(None)
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, partial(Abstract().remove_item, None))
 
     def test_remove_item_requires_2_arguments_2(self):
-        err = False
-        try:
-            Abstract().remove_item(None, None)
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError, partial(Abstract().remove_item,
+                None, None))
 
     def test_create_collection_requires_no_arguments(self):
-        err = False
-        try:
-            Abstract().create_collection()
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError, Abstract().create_collection)
+
 
     def test_create_collection_allows_to_pass_one_argument(self):
-        err = False
-        try:
-            Abstract().create_collection(collection_id='abs')
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError,
+                partial(Abstract().create_collection, 'abs'))
 
     def test_remove_collection_requires_1_argument(self):
-        err = False
-        try:
-            Abstract().remove_collection()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, Abstract().remove_collection)
 
     def test_remove_collection_requires_1_argument_1(self):
-        err = False
-        try:
-            Abstract().remove_collection(None)
-        except NotImplementedError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(NotImplementedError,
+                partial(Abstract().remove_collection, None))
 
 
 if "__main__" == __name__:

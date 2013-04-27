@@ -5,6 +5,7 @@
 # python standard library
 #
 import unittest
+from functools import partial
 
 # hack for loading modules
 from _path import fix, mock
@@ -100,12 +101,9 @@ class CollectionFactoryTestCase(unittest.TestCase):
 
 # from_iterator_with_tuples
     def test_from_iterator_with_tuples_expects_iterator_with_tuples(self):
-        err = False
-        try:
-            CollectionFactory().from_iterator_with_tuples((i for i in [1]))
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, partial(
+                CollectionFactory().from_iterator_with_tuples,
+                (i for i in [1])))
 
     def test_from_iterator_with_tuples_expects_iterator_with_tuples_1(self):
         CollectionFactory().from_iterator_with_tuples((i for i in [('a', 1)]))
@@ -125,12 +123,7 @@ class CollectionFactoryTestCase(unittest.TestCase):
 
 # discover
     def test_discover_requires_1_argument(self):
-        err = False
-        try:
-            CollectionFactory().discover()
-        except TypeError:
-            err = True
-        self.assertTrue(err)
+        self.assertRaises(TypeError, CollectionFactory().discover)
 
     def test_discover_uses_given_collection_class(self):
         self.cf.discover({'a:': 1})
