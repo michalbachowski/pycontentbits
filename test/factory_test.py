@@ -14,7 +14,7 @@ fix()
 ##
 # test helper
 #
-from mock_helper import IsA
+from contentbits.testutils import IsA
 
 ##
 # content bits modules

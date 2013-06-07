@@ -12,11 +12,6 @@ from _path import fix, mock
 fix()
 
 ##
-# test helper
-#
-from mock_helper import IsA
-
-##
 # content bits modules
 #
 from contentbits.manager import Manager
