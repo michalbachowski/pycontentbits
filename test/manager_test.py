@@ -146,10 +146,12 @@ class ManagerTestCase(unittest.TestCase):
                 self.collection))
 
     def test_save_collection_reads_collection_from_storage(self):
+        self.factory.discover.return_value = iter([])
         self.manager.save_collection(self.collection)
         self.storage.read_collection.assert_called_once_with(self.collection.id)
 
     def test_save_collection_creates_collection_when_not_found(self):
+        self.factory.discover.return_value = iter([])
         self.promise.done = lambda a: self.promise
         self.promise.fail = mock.MagicMock(side_effect=lambda a:
                 [a(exception=self.exception), self.promise][1])
@@ -179,7 +181,7 @@ class ManagerTestCase(unittest.TestCase):
         items = iter([item])
 
         self.storage.read_collection = mock.MagicMock(return_value=self.promise)
-        self.collection.__next__ = mock.MagicMock(side_effect=lambda: next(items))
+        self.factory.discover.return_value = items
 
         # test
         self.manager.save_collection(self.collection)
