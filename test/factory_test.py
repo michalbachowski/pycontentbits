@@ -10,7 +10,7 @@ from functools import partial
 ##
 # test helper
 #
-from testutils import IsA
+from testutils import mock, IsA
 
 ##
 # content bits modules

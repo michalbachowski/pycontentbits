@@ -5,18 +5,20 @@
 # python standard library
 #
 import unittest
-from functools import partial
 
 ##
 # test utilities
 #
 from testutils import mock, IsA
 
+##
+# PyPromise modules
+#
+from promise import Promise
 
 ##
 # content bits modules
 #
-from promise import Promise
 from contentbits.storage.memory import Memory
 
 
