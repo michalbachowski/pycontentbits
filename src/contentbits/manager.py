@@ -75,6 +75,10 @@ class Manager(object):
             collection_factory = CollectionFactory()
         self.set_collection_factory(collection_factory)
 
+    @property
+    def storage(self):
+        return self._storage
+
     def set_storage(self, storage):
         self._storage = storage
         return self
@@ -82,6 +86,10 @@ class Manager(object):
     def set_collection_factory(self, factory):
         self._collection_factory = factory
         return self
+
+    @property
+    def collection_factory(self):
+        return self._collection_factory
 
     def save_collection(self, collection):
         return Manager.CollectionSaveHelper(self, collection).save()
