@@ -15,8 +15,8 @@ setup(name='PyContentBits',
     license='New BSD License',
     author='Michał Bachowski',
     author_email='michal@bachowski.pl',
+    packages=['contentbits'],
     package_dir={'': 'src'},
-    py_modules=['contentbits'],
     install_requires=['python_mimeparse >= 0.1.4', 'tornado >= 3.0.1', \
             'PyPromise==1.1.0'],
     dependency_links = ['http://github.com/michalbachowski/pypromise/archive/1.1.0.zip#egg=PyPromise-1.1.0'])

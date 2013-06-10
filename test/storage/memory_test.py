@@ -7,10 +7,10 @@
 import unittest
 from functools import partial
 
-# hack for loading modules
-from mock_helper import IsA
-from _path import fix, mock
-fix(2)
+##
+# test utilities
+#
+from testutils import mock, IsA
 
 
 ##

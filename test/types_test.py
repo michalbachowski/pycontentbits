@@ -7,10 +7,6 @@
 import unittest
 import sys
 
-# hack for loading modules
-import _path
-_path.fix()
-
 
 ##
 # content bits modules

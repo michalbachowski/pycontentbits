@@ -7,10 +7,6 @@
 import unittest
 from functools import partial
 
-# hack for loading modules
-import _path
-_path.fix(2)
-
 
 ##
 # content bits modules
