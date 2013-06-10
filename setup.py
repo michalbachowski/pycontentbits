@@ -15,7 +15,7 @@ setup(name='PyContentBits',
     license='New BSD License',
     author='Michał Bachowski',
     author_email='michal@bachowski.pl',
-    packages=['contentbits'],
+    packages=['contentbits', 'contentbits.storage', 'contentbits.interface'],
     package_dir={'': 'src'},
     install_requires=['python_mimeparse >= 0.1.4', 'tornado >= 3.0.1', \
             'PyPromise==1.1.0'],
