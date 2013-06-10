@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from functools import partial
+import six
 from promise import Deferred
 from contentbits.factory import CollectionFactory
 
 
 class Manager(object):
 
-    class CollectionSaveHelper(object):
+    class CollectionSaveHelper(six.Iterator):
 
         def __init__(self, manager, new_collection):
             self.deferred = Deferred()

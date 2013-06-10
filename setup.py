@@ -18,5 +18,5 @@ setup(name='PyContentBits',
     packages=['contentbits', 'contentbits.storage', 'contentbits.interface'],
     package_dir={'': 'src'},
     install_requires=['python_mimeparse >= 0.1.4', 'tornado >= 3.0.1', \
-            'PyPromise==1.1.0'],
+            'PyPromise==1.1.0', 'six==1.3.0'],
     dependency_links = ['http://github.com/michalbachowski/pypromise/archive/1.1.0.zip#egg=PyPromise-1.1.0'])
