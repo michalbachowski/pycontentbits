@@ -4,13 +4,13 @@ test:
 	$(testrunner)
 
 coverage_run:
-	coverage run $(testrunner)
+	export PYTHONPATH="`readlink -f '../src/'`:$$PYTHONPATH" && python -mcoverage run $(testrunner)
 
 coverage_report:
-	coverage report -m
+	python -mcoverage report -m
 
 coverage_erase:
-	coverage erase
+	python -mcoverage erase
 
 coverage: coverage_erase coverage_run coverage_report
 	@echo "DONE"
