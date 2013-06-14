@@ -121,7 +121,15 @@ class Manager(object):
                         collection, item))\
                 .fail(deferred.reject)
 
-    def _item_added_to_collection(self, deferred, collection, item, item_id):
+    def _item_added_to_collection(self, deferred, collection, item, result):
+        # unpack result tuple
+        collection_id, item_id = result
+        if collection.id != collection_id:
+            # TODO: handle error
+            return
+        if item.id is not None and item.id != item_id:
+            # TODO: handle error
+            return
         item.id = item_id
         collection.append(item)
         deferred.resolve(collection, item)
