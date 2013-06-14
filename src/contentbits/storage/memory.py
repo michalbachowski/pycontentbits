@@ -40,7 +40,7 @@ class Memory(Abstract):
         if item_id is None:
             item_id = self._get_idx(self._collections[collection_id])
         self._collections[collection_id][item_id] = data
-        return item_id
+        return (collection_id, item_id)
 
     @as_deferred
     def remove_item(self, collection_id, item_id):
