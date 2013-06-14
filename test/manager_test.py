@@ -13,6 +13,11 @@ from functools import partial
 from testutils import mock, IsCallable
 
 ##
+# promise
+#
+from promise import Promise
+
+##
 # content bits modules
 #
 from contentbits.manager import Manager
@@ -60,13 +65,7 @@ class ManagerTestCase(unittest.TestCase):
         self.assertFalse(err)
 
     def test_set_storage_sets_storage_to_be_used(self):
-        storage = mock.MagicMock()
-        storage.store_item = mock.MagicMock()
-        item = mock.MagicMock()
-        item.id = None
-        item.data = None
-        Manager().set_storage(storage).add_item_to_collection(None, item)
-        storage.store_item.assert_called_once_with(None, None, None)
+        self.assertEqual(Manager().set_storage(self.storage).storage, self.storage)
 
     def test_storage_defaults_to_None(self):
         self.assertIsNone(Manager().storage)
@@ -114,20 +113,33 @@ class ManagerTestCase(unittest.TestCase):
         self.manager.remove_item_from_collection(1, 2)
         self.storage.remove_item.assert_called_once_with(1, 2)
 
+    def test_add_item_to_collection_expects_Collection_and_Item_instance(self):
+        self.assertRaises(AttributeError,
+                partial(self.manager.add_item_to_collection, None, None))
+        self.assertRaises(AttributeError,
+                partial(self.manager.add_item_to_collection, self.collection,
+                        None))
+        item = mock.MagicMock()
+        item.id = 2
+        item.data = 'foo'
+        self.assertIsNotNone(partial(self.manager.add_item_to_collection,
+                self.collection, item))
+
     def test_add_item_to_collection_uses_storage(self):
         self.storage.store_item = mock.MagicMock()
         item = mock.MagicMock()
         item.id = 2
         item.data = 'foo'
-        self.manager.add_item_to_collection(1, item)
+        self.manager.add_item_to_collection(self.collection, item)
         self.storage.store_item.assert_called_once_with(1, 'foo', 2)
 
-    def test_add_item_to_collection_returns_what_storage_returned(self):
-        self.storage.store_item = mock.MagicMock(return_value=3)
+    def test_add_item_to_collection_returns_promise(self):
+        self.storage.store_item = mock.MagicMock(return_value=self.promise)
         item = mock.MagicMock()
         item.id = 2
         item.data = 'foo'
-        self.assertEqual(self.manager.add_item_to_collection(1, item), 3)
+        self.assertIsInstance(self.manager.add_item_to_collection(
+                self.collection, item), Promise)
 
     def test_save_collection_requires_1_argument(self):
         self.assertRaises(TypeError, self.manager.save_collection)

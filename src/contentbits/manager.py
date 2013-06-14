@@ -46,7 +46,7 @@ class Manager(object):
 
         def _add_items(self):
             try:
-                self._manager.add_item_to_collection(self.new_collection.id,
+                self._manager.add_item_to_collection(self.new_collection,
                         next(self)).done(self._item_added)\
                         .fail(self.deferred.reject)
             except StopIteration:
@@ -113,5 +113,15 @@ class Manager(object):
     def remove_item_from_collection(self, collection_id, item_id):
         return self._storage.remove_item(collection_id, item_id)
 
-    def add_item_to_collection(self, collection_id, item):
-        return self._storage.store_item(collection_id, item.data, item.id)
+    def add_item_to_collection(self, collection, item):
+        deferred = Deferred()
+        self._storage.store_item(collection.id, item.data, item.id)\
+                .done(partial(self._item_added_to_collection, deferred,
+                        collection, item))\
+                .fail(deferred.reject)
+        return deferred.promise()
+
+    def _item_added_to_collection(self, deferred, collection, item, item_id):
+        item.id = item_id
+        collection.append(item)
+        deferred.resolve(collection, item)
