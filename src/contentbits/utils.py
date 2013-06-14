@@ -11,8 +11,10 @@ def inject_deferred_return_promise(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         d = Deferred()
-        func(deferred=d, *args, **kwargs)
+        kwargs['deferred'] = d
+        func(*args, **kwargs)
         return d.promise()
+    return wrapper
 
 def as_deferred(func):
     """

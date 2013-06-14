@@ -115,13 +115,13 @@ class Manager(object):
         return self._storage.remove_item(collection_id, item_id)
 
     @inject_deferred_return_promise
-    def add_item_to_collection(self, deferred, collection, item):
+    def add_item_to_collection(self, collection, item, deferred):
         self._storage.store_item(collection.id, item.data, item.id)\
-                .done(partial(self._item_added_to_collection, deferred,
-                        collection, item))\
+                .done(partial(self._item_added_to_collection,
+                        collection, item, deferred))\
                 .fail(deferred.reject)
 
-    def _item_added_to_collection(self, deferred, collection, item, result):
+    def _item_added_to_collection(self, collection, item, deferred, result):
         # unpack result tuple
         collection_id, item_id = result
         if collection.id != collection_id:
