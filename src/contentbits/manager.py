@@ -63,7 +63,7 @@ class Manager(object):
         def _del_items(self, deleted_item_id=None):
             try:
                 self._manager.remove_item_from_collection(
-                        self.new_collection.id, next(self.old_collection).id)\
+                        self.new_collection, next(self.old_collection))\
                         .done(partial(self._del_items))\
                         .fail(self.deferred.reject)
             except StopIteration:
@@ -111,8 +111,23 @@ class Manager(object):
     def remove_collection(self, collection_id):
         return self._storage.remove_collection(collection_id)
 
-    def remove_item_from_collection(self, collection_id, item_id):
-        return self._storage.remove_item(collection_id, item_id)
+    @inject_deferred_return_promise
+    def remove_item_from_collection(self, collection, item, deferred):
+        self._storage.remove_item(collection.id, item.id).fail(deferred.reject)\
+                .done(partial(self._item_removed_from_collection,
+                       collection, item, deferred))
+
+    def _item_removed_from_collection(self, collection, item, deferred, result):
+        # unpack result tuple
+        collection_id, item_id = result
+        if collection.id != collection_id:
+            # TODO: handle error
+            return
+        if item.id != item_id:
+            # TODO: handle error
+            return
+        del collection[item]
+        deferred.resolve(collection, item)
 
     @inject_deferred_return_promise
     def add_item_to_collection(self, collection, item, deferred):

@@ -20,6 +20,7 @@ from promise import Promise
 ##
 # content bits modules
 #
+from contentbits.types import Collection, Item
 from contentbits.manager import Manager
 from contentbits.factory import CollectionFactory
 
@@ -109,9 +110,23 @@ class ManagerTestCase(unittest.TestCase):
         self.storage.remove_collection.assert_called_once_with(1)
 
     def test_remove_item_from_collection_uses_storage(self):
+        item = mock.MagicMock()
+        item.id = 2
         self.storage.remove_item = mock.MagicMock()
-        self.manager.remove_item_from_collection(1, 2)
+        self.manager.remove_item_from_collection(self.collection, item)
         self.storage.remove_item.assert_called_once_with(1, 2)
+
+    def test_remove_item_from_collection_removes_item_from_collection_instance(self):
+        item = Item('foo', 2)
+        c = Collection(1)
+        c.append(item)
+        self.storage.remove_item = mock.MagicMock(return_value=self.promise)
+        self.promise.done = mock.MagicMock(side_effect=lambda a:
+                [a(('1', '2')), self.promise][1])
+        self.promise.fail.return_value = self.promise
+        self.assertTrue(item in c)
+        self.manager.remove_item_from_collection(c, item)
+        self.assertFalse(item in c)
 
     def test_add_item_to_collection_expects_Collection_and_Item_instance(self):
         self.assertRaises(AttributeError,
