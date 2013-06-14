@@ -1,10 +1,14 @@
 testrunner=./runtest.py
+fix_pythonpath=export PYTHONPATH="`readlink -f '../src/'`:$$PYTHONPATH" &&
 
 test:
 	$(testrunner)
 
+test_local:
+	$(fix_pythonpath) $(testrunner)
+
 coverage_run:
-	export PYTHONPATH="`readlink -f '../src/'`:$$PYTHONPATH" && python -mcoverage run $(testrunner)
+	$(fix_pythonpath) python -mcoverage run $(testrunner)
 
 coverage_report:
 	python -mcoverage report -m
@@ -15,4 +19,4 @@ coverage_erase:
 coverage: coverage_erase coverage_run coverage_report
 	@echo "DONE"
 
-.PHONY: test coverage_report coverage_erase coverage
+.PHONY: test test_local coverage_report coverage_erase coverage
