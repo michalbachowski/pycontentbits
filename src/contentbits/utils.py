@@ -4,6 +4,16 @@ from promise import Deferred
 from functools import wraps
 
 
+def inject_deferred_return_promise(func):
+    """
+    Injects new deferred object to wrapped function and returns promise instance (for given deferred)
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        d = Deferred()
+        func(deferred=d, *args, **kwargs)
+        return d.promise()
+
 def as_deferred(func):
     """
     Turns synchronous function so it returns deferred instance
