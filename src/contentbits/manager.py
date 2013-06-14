@@ -4,6 +4,7 @@ from functools import partial
 import six
 from promise import Deferred
 from contentbits.factory import CollectionFactory
+from contentbits.utils import inject_deferred_return_promise
 
 
 class Manager(object):
@@ -113,13 +114,12 @@ class Manager(object):
     def remove_item_from_collection(self, collection_id, item_id):
         return self._storage.remove_item(collection_id, item_id)
 
-    def add_item_to_collection(self, collection, item):
-        deferred = Deferred()
+    @inject_deferred_return_promise
+    def add_item_to_collection(self, deferred, collection, item):
         self._storage.store_item(collection.id, item.data, item.id)\
                 .done(partial(self._item_added_to_collection, deferred,
                         collection, item))\
                 .fail(deferred.reject)
-        return deferred.promise()
 
     def _item_added_to_collection(self, deferred, collection, item, item_id):
         item.id = item_id
