@@ -149,12 +149,23 @@ class ManagerTestCase(unittest.TestCase):
         self.storage.store_item.assert_called_once_with(1, 'foo', 2)
 
     def test_add_item_to_collection_returns_promise(self):
+        self.promise.done = mock.MagicMock(side_effect=lambda a:
+                [a((1,2)), self.promise][1])
         self.storage.store_item = mock.MagicMock(return_value=self.promise)
         item = mock.MagicMock()
         item.id = 2
         item.data = 'foo'
         self.assertIsInstance(self.manager.add_item_to_collection(
                 self.collection, item), Promise)
+
+    def test_add_item_to_collection_adds_item_to_collection_instance(self):
+        item = mock.MagicMock()
+        item.id = 2
+        item.data = 'foo'
+        self.promise.done = mock.MagicMock(side_effect=lambda a:
+                [a((1,2)), self.promise][1])
+        self.manager.add_item_to_collection(self.collection, item)
+        self.collection.append.assert_called_once_wite(item)
 
     def test_save_collection_requires_1_argument(self):
         self.assertRaises(TypeError, self.manager.save_collection)
